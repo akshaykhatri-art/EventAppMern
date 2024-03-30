@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import user_icon from "../assets/images/person.png";
 import email_icon from "../assets/images/email.png";
@@ -12,12 +12,25 @@ const Register = () => {
   //     <Link to="/login">Login Page</Link>
   //   </div>
   // );
+
+  const [action, setAction] = useState("Register");
+
   return (
-    <div className="container">
-      <div className="header">
+    <div className="container-register-login">
+      {/* <div className="header">
         <div className="text">Register</div>
         <div className="underline"></div>
+      </div> */}
+
+      <div className="submit-container top-container">
+        <div className="submit">Register</div>
+        <div className="submit">
+          <Link className="link gray" to="/login">
+            Login Page
+          </Link>
+        </div>
       </div>
+
       <div className="inputs">
         <div className="input">
           <img src={user_icon} alt="" />
@@ -35,11 +48,9 @@ const Register = () => {
       <div className="forgot-password">
         Lost Password? <span>Click Here!</span>
       </div>
-      <div className="submit-container">
-        <div className="submit">Register</div>
-        <div className="submit">Login</div>
+      <div className="submit-container button-container">
+        <div className="submit button">Register</div>
       </div>
-      <Link to="/login">Login Page</Link>
     </div>
   );
 };
