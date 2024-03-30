@@ -1,6 +1,13 @@
 import React from "react";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
-import { ForgotPassword, HomeLayout, Login, Otp, Register } from "./pages";
+import {
+  ForgotPassword,
+  HomeLayout,
+  Login,
+  Otp,
+  Register,
+  SetNewPassword,
+} from "./pages";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +29,10 @@ const router = createBrowserRouter([
   {
     path: "/otp",
     element: <Otp />,
+  },
+  {
+    path: "/set-new-password",
+    element: <SetNewPassword />,
   },
 ]);
 
