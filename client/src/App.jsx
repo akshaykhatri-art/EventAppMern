@@ -1,7 +1,24 @@
 import React from "react";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import { HomeLayout, Login, Register } from "./pages";
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeLayout />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+]);
 
 const App = () => {
-  return <h1>Event App</h1>;
+  return <RouterProvider router={router} />;
 };
 
 export default App;
