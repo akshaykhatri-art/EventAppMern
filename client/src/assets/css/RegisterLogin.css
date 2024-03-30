@@ -83,6 +83,12 @@
   margin-top: 40px;
 }
 
+.submit-container.top-container h2 {
+  color: #3c009d;
+  font-size: 30px;
+  font-weight: 600;
+}
+
 .submit,
 .link {
   display: flex;
@@ -106,7 +112,7 @@
   height: 59px;
   color: #fff;
   background: #4c00b4;
-  border-radius: 50px;
+  border-radius: 5px;
   font-size: 19px;
   font-weight: 700;
   cursor: pointer;
@@ -115,4 +121,27 @@
 .gray {
   background: #eaeaea;
   color: #676767;
+}
+
+.card-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #676767;
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.back-to-login {
+  margin-top: 10px;
+  color: #797979;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.back-to-login span {
+  font-size: 20px;
+  font-weight: 800;
 }

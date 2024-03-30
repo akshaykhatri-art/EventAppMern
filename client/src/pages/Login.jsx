@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import user_icon from "../assets/images/person.png";
 import email_icon from "../assets/images/email.png";
 import password_icon from "../assets/images/password.png";
 import "../assets/css/RegisterLogin.css";
@@ -28,7 +27,10 @@ const Login = () => {
         </div>
       </div>
       <div className="forgot-password">
-        Lost Password? <span>Click Here!</span>
+        Lost Password?{" "}
+        <span>
+          <Link to="/forgot-password">Click Here!</Link>
+        </span>
       </div>
       <div className="submit-container button-container">
         <div className="submit button">Login</div>
