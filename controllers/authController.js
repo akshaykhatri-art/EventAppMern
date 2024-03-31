@@ -76,3 +76,36 @@ export const login = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const verifyOTP = async (req, res) => {
+  try {
+    console.log("reqBody", req.body);
+    const { email, otp } = req.body;
+    const user = await User.findOne({ email });
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    if (!user.otp) {
+      return res.status(400).json({ message: "No OTP found for the user" });
+    }
+
+    if (otp === user.otp) {
+      user.otp = null;
+      await user.save();
+      const token = jwt.sign(
+        { _id: user._id, isAdmin: user.isAdmin },
+        "akshayhere"
+      );
+
+      return res
+        .status(200)
+        .json({ message: "OTP verified successfully", token });
+    } else {
+      return res.status(400).json({ message: "Invalid OTP" });
+    }
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};

@@ -23,16 +23,18 @@ export const action = async ({ request }) => {
   }
 
   try {
-    debugger;
     const response = await customFetch.post("/auth/login", data);
     if (response.data.message === "OTP sent to your email for admin login") {
-      return redirect("/otp", { email: data.email });
+      localStorage.setItem("email", data.email);
+      return redirect("/verify-otp");
     } else {
       const { token, isAdmin } = response.data;
       localStorage.setItem("token", token);
       if (isAdmin) {
+        toast.success("Admin Login Successful");
         return redirect("/");
       } else {
+        toast.success("User Login Successful");
         return redirect("/");
       }
     }

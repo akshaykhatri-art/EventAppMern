@@ -11,6 +11,7 @@ import {
 
 import { action as registerAction } from "./pages/Register";
 import { action as loginAction } from "./pages/Login";
+import { action as verifyOTPAction } from "./pages/Otp";
 
 const router = createBrowserRouter([
   {
@@ -32,8 +33,9 @@ const router = createBrowserRouter([
     element: <ForgotPassword />,
   },
   {
-    path: "/otp",
+    path: "/verify-otp",
     element: <Otp />,
+    action: verifyOTPAction,
   },
   {
     path: "/set-new-password",

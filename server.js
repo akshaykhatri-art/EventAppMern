@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 const app = express();
+import session from "express-session";
 import mongoose from "mongoose";
 import bodyParser from "body-parser";
 
@@ -10,6 +11,13 @@ import authRoutes from "./routes/authRoutes.js";
 
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
+app.use(
+  session({
+    secret: "secret",
+    resave: false,
+    saveUninitialized: true,
+  })
+);
 
 const PORT = process.env.PORT || 3000;
 
