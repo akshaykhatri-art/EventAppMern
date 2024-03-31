@@ -12,7 +12,11 @@ const eventSchema = new mongoose.Schema(
     eventBanner: { type: String },
     eventImages: [{ type: String }],
     displayStatus: { type: Boolean, default: true },
-    createdBy: { type: Schema.Types.ObjectId, ref: "User", required: true },
+    createdBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
   },
   { timestamps: true }
 );

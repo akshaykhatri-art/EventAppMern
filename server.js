@@ -8,9 +8,11 @@ import bodyParser from "body-parser";
 
 // Routes
 import authRoutes from "./routes/authRoutes.js";
+import eventRoutes from "./routes/eventRoutes.js";
 
 app.use(bodyParser.json());
 app.use("/auth", authRoutes);
+app.use("/events", eventRoutes);
 app.use(
   session({
     secret: "secret",
