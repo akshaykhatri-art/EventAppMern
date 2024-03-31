@@ -107,3 +107,23 @@ export const deleteEvent = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const getAllEvents = async (req, res) => {
+  try {
+    const { page = 1, limit = 5 } = req.query;
+
+    const pageNumber = parseInt(page);
+    const limitNumber = parseInt(limit);
+
+    const skip = (pageNumber - 1) * limitNumber;
+    const events = await Event.find().skip(skip).limit(limitNumber);
+
+    const totalCount = await Event.countDocuments();
+    res.json({
+      events,
+      totalCount,
+    });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
