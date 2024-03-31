@@ -1,6 +1,7 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import User from "../models/userModel.js";
+import { generateOTP, sendOTPByEmail } from "../services/emailService.js";
 
 export const register = async (req, res) => {
   try {
@@ -51,6 +52,16 @@ export const login = async (req, res) => {
       return res.status(400).json({
         message: "User has reached the maximum limit of device logins",
       });
+    }
+
+    if (user.isAdmin) {
+      const otp = generateOTP();
+      user.otp = otp;
+      await user.save();
+      await sendOTPByEmail(email, otp);
+      return res
+        .status(200)
+        .json({ message: "OTP sent to your email for admin login" });
     }
 
     const token = jwt.sign(

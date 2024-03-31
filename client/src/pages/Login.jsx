@@ -13,7 +13,6 @@ import customFetch from "../utils/customFetch";
 import { toast } from "react-toastify";
 
 export const action = async ({ request }) => {
-  debugger;
   const formData = await request.formData();
   const data = Object.fromEntries(formData);
 
@@ -24,11 +23,21 @@ export const action = async ({ request }) => {
   }
 
   try {
-    await customFetch.post("/auth/login", data);
-    toast.success("Login successful");
-    return redirect("/");
+    debugger;
+    const response = await customFetch.post("/auth/login", data);
+    if (response.data.message === "OTP sent to your email for admin login") {
+      return redirect("/otp", { email: data.email });
+    } else {
+      const { token, isAdmin } = response.data;
+      localStorage.setItem("token", token);
+      if (isAdmin) {
+        return redirect("/");
+      } else {
+        return redirect("/");
+      }
+    }
   } catch (error) {
-    toast.error(error?.response?.data?.message);
+    toast.error(error?.response?.data?.message || "An error occurred");
     return errors;
   }
 };
@@ -53,11 +62,21 @@ const Login = () => {
           {errors?.msg && <p style={{ color: "red" }}>{errors.msg}</p>}
           <div className="input">
             <img src={email_icon} alt="" />
-            <input type="email" name="email" placeholder="Email" />
+            <input
+              type="email"
+              name="email"
+              placeholder="Email"
+              defaultValue="akshaykhatri22@gmail.com"
+            />
           </div>
           <div className="input">
             <img src={password_icon} alt="" />
-            <input type="password" name="password" placeholder="Password" />
+            <input
+              type="password"
+              name="password"
+              placeholder="Password"
+              defaultValue="password123"
+            />
           </div>
         </div>
         <div className="forgot-password">
