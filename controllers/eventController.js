@@ -127,3 +127,36 @@ export const getAllEvents = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const filterEvents = async (req, res) => {
+  try {
+    const userData = req.user;
+    const isAdmin = userData.isAdmin;
+
+    let query = {};
+
+    if (!isAdmin) {
+      query.createdBy = userData._id;
+    }
+
+    if (req.query.title) {
+      query.title = new RegExp(req.query.title, "i");
+    }
+
+    if (req.query.city) {
+      query.city = new RegExp(req.query.city, "i");
+    }
+
+    if (req.query.date) {
+      const date = new Date(req.query.date);
+      if (!isNaN(date.getTime())) {
+        query.createdAt = { $gte: date };
+      }
+    }
+
+    const events = await Event.find(query);
+    res.status(200).json(events);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
