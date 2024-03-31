@@ -39,3 +39,25 @@ export const createEvent = async (req, res) => {
     res.status(400).json({ message: err.message });
   }
 };
+
+export const deleteEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.createdBy.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to delete this event" });
+    }
+
+    await Event.deleteOne({ _id: eventId });
+    res.json({ message: "Event deleted successfully" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
