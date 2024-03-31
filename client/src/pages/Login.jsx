@@ -1,41 +1,78 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import {
+  Link,
+  Form,
+  redirect,
+  useActionData,
+  useNavigate,
+} from "react-router-dom";
 import email_icon from "../assets/images/email.png";
 import password_icon from "../assets/images/password.png";
 import "../assets/css/RegisterLogin.css";
+import customFetch from "../utils/customFetch";
+import { toast } from "react-toastify";
+
+export const action = async ({ request }) => {
+  debugger;
+  const formData = await request.formData();
+  const data = Object.fromEntries(formData);
+
+  const errors = { msg: "" };
+  if (data.password.length < 3) {
+    errors.msg = "password too short";
+    return errors;
+  }
+
+  try {
+    await customFetch.post("/auth/login", data);
+    toast.success("Login successful");
+    return redirect("/");
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
+    return errors;
+  }
+};
 
 const Login = () => {
-  return (
-    <div className="container-register-login">
-      <div className="submit-container top-container">
-        <div className="submit">
-          <Link className="link gray" to="/register">
-            Register Page
-          </Link>
-        </div>
-        <div className="submit">Login</div>
-      </div>
+  const errors = useActionData();
+  const navigate = useNavigate();
 
-      <div className="inputs">
-        <div className="input">
-          <img src={email_icon} alt="" />
-          <input type="email" placeholder="Email" />
+  return (
+    <Form method="post">
+      <div className="container-register-login">
+        <div className="submit-container top-container">
+          <div className="submit">
+            <Link className="link gray" to="/register">
+              Register Page
+            </Link>
+          </div>
+          <div className="submit">Login</div>
         </div>
-        <div className="input">
-          <img src={password_icon} alt="" />
-          <input type="password" placeholder="Password" />
+
+        <div className="inputs">
+          {errors?.msg && <p style={{ color: "red" }}>{errors.msg}</p>}
+          <div className="input">
+            <img src={email_icon} alt="" />
+            <input type="email" name="email" placeholder="Email" />
+          </div>
+          <div className="input">
+            <img src={password_icon} alt="" />
+            <input type="password" name="password" placeholder="Password" />
+          </div>
+        </div>
+        <div className="forgot-password">
+          Lost Password?{" "}
+          <span>
+            <Link to="/forgot-password">Click Here!</Link>
+          </span>
+        </div>
+        <div className="submit-container button-container">
+          <button type="submit" className="submit button">
+            Login
+          </button>
         </div>
       </div>
-      <div className="forgot-password">
-        Lost Password?{" "}
-        <span>
-          <Link to="/forgot-password">Click Here!</Link>
-        </span>
-      </div>
-      <div className="submit-container button-container">
-        <div className="submit button">Login</div>
-      </div>
-    </div>
+    </Form>
   );
 };
 

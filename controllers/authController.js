@@ -34,3 +34,34 @@ export const register = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const login = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+      return res.status(400).json({ message: "Invalid credentials" });
+    }
+
+    if (user.devices.length >= 4) {
+      return res.status(400).json({
+        message: "User has reached the maximum limit of device logins",
+      });
+    }
+
+    const token = jwt.sign(
+      { _id: user._id, isAdmin: user.isAdmin },
+      "akshayhere"
+    );
+
+    user.devices.push(req.ip);
+    await user.save();
+    res.header("auth-token", token).json({ token, isAdmin: user.isAdmin });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
