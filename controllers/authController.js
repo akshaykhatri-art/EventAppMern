@@ -109,3 +109,35 @@ export const verifyOTP = async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 };
+
+export const logout = async (req, res) => {
+  try {
+    const { token } = req.body;
+
+    if (!token) {
+      return res.status(400).json({ message: "Token is required" });
+    }
+
+    const decodedToken = jwt.verify(token, "akshayhere");
+
+    const userId = decodedToken._id;
+    if (!userId) {
+      return res.status(400).json({ message: "Invalid token" });
+    }
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const index = user.devices.indexOf(req.deviceId);
+    if (index !== -1) {
+      user.devices.splice(index, 1);
+    }
+
+    await user.save();
+    res.status(200).json({ message: "Logout successful" });
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+};
