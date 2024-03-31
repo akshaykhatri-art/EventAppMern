@@ -40,6 +40,40 @@ export const createEvent = async (req, res) => {
   }
 };
 
+export const updateEvent = async (req, res) => {
+  try {
+    const eventId = req.params.id;
+    const event = await Event.findById(eventId);
+    console.log("events", event);
+
+    if (!event) {
+      return res.status(404).json({ message: "Event not found" });
+    }
+
+    if (event.createdBy.toString() !== req.user._id.toString()) {
+      return res
+        .status(403)
+        .json({ message: "Unauthorized to update this event" });
+    }
+
+    event.title = req.body.title;
+    event.description = req.body.description;
+    event.email = req.body.email;
+    event.phone = req.body.phone;
+    event.address = req.body.address;
+    event.city = req.body.city;
+    event.organizerName = req.body.organizerName;
+    event.eventBanner = req.body.eventBanner;
+    event.eventImages = req.body.eventImages;
+    event.displayStatus = req.body.displayStatus;
+
+    const updatedEvent = await event.save();
+    res.json(updatedEvent);
+  } catch (err) {
+    res.status(400).json({ message: err.message });
+  }
+};
+
 export const deleteEvent = async (req, res) => {
   try {
     const eventId = req.params.id;
